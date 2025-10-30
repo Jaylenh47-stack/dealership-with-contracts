@@ -67,7 +67,6 @@ public class SalesContract extends Contract{
 
         return String.format("SALE|%s|%s|%s|%d|%d|%s|%s|%s|%s|%d|%.2f|%.2f|%.2f|%.2f|%.2f|%s|%.2f",
                 this.getDate(),this.getCustomerName(),this.getCustomerEmail(),v.getVin(),v.getYear(),v.getMake(),v.getModel(),
-                v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice(), this.salesTax, this.recordingFee, this.processingFee,
-                this.getTotalPrice(), this.generateYesOrNo(), this.getMonthlyPayment());
+                v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice(), this.salesTax, this.recordingFee, this.processingFee, this.getTotalPrice(), this.generateYesOrNo(), this.getMonthlyPayment() );
     }
 }

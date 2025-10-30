@@ -15,6 +15,8 @@ public abstract class Contract {
         this.vehicleSold = vehicleSold;
     }
 
+
+
     public String getDate() {
         return date;
     }

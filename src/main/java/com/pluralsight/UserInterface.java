@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.rmi.dgc.Lease;
 import java.util.ArrayList;
 
 public class UserInterface {
@@ -173,11 +174,52 @@ public class UserInterface {
         }
     }
 
+    public SalesContract createSalesContractWithCustomer(){
+
+
+        int vin = ConsoleHelper.promptForInt("Enter the vin number of the vehicle you would like to purchase");
+        Vehicle vehicleSold = dealership.getVehicleByVIN(vin);
+
+        SalesContract salesContract = new SalesContract("", "", "",vehicleSold,false);
+
+        salesContract.setDate(ConsoleHelper.promptForString("Contract date (YYYYMMDD)"));
+        salesContract.setCustomerName(ConsoleHelper.promptForString("Customer name"));
+        salesContract.setCustomerEmail(ConsoleHelper.promptForString("Customer email")) ;
+        String financeOption = ConsoleHelper.promptForString("Would you like to finance the vehicle (yes/no");
+        //(financeOption.equalsIgnoreCase("yes"))? salesContract.setFinanced(salesContract.isFinanced()) :
+        salesContract.setFinanced(financeOption.equalsIgnoreCase("yes"));
+
+
+        return salesContract;
+
+    }
+
+    public LeaseContract createLeaseContractWithCustomer(){
+        return null;
+    }
+
     public void processSellLeaseVehicleRequest(){
         //User chooses vehicle by Vin
 
 
         //Collect data for sale or lease
+        int sellOrLease = ConsoleHelper.promptForInt("Sell or Lease\n" +
+                                                     "1) Sell \n" +
+                                                        "2) Lease");
+
+        switch(sellOrLease){
+            case 1:
+                createSalesContractWithCustomer();
+               //dealership.removeVehicle(v);
+               // ContractDataManager.saveContract();
+                break;
+            case 2:
+                createLeaseContractWithCustomer();
+                //dealership.removeVehicle(v);
+              //  ContractDataManager.saveContract();
+                break;
+        }
+
 
 
         //Append the data to contracts file
