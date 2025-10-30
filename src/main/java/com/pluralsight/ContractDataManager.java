@@ -11,9 +11,14 @@ public class ContractDataManager {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             if (contract instanceof SalesContract s){
-               // bufferedWriter.write("Sale|" + s.getDate() + "")
-               // bufferedWriter.write(String.format("aasfsdfsd", a, a, a));
+
                 bufferedWriter.write(s.toEncodedString());
+                bufferedWriter.close();
+            }
+
+            if (contract instanceof LeaseContract l){
+               // bufferedWriter.write(l.toEncodedString());
+                bufferedWriter.close();
             }
 
         }

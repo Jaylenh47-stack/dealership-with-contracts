@@ -180,17 +180,19 @@ public class UserInterface {
         int vin = ConsoleHelper.promptForInt("Enter the vin number of the vehicle you would like to purchase");
         Vehicle vehicleSold = dealership.getVehicleByVIN(vin);
 
-        SalesContract salesContract = new SalesContract("", "", "",vehicleSold,false);
 
-        salesContract.setDate(ConsoleHelper.promptForString("Contract date (YYYYMMDD)"));
-        salesContract.setCustomerName(ConsoleHelper.promptForString("Customer name"));
-        salesContract.setCustomerEmail(ConsoleHelper.promptForString("Customer email")) ;
+        String date = ConsoleHelper.promptForString("Contract date (YYYYMMDD)");
+        String name = ConsoleHelper.promptForString("Customer name");
+        String email = ConsoleHelper.promptForString("Customer email") ;
         String financeOption = ConsoleHelper.promptForString("Would you like to finance the vehicle (yes/no");
         //(financeOption.equalsIgnoreCase("yes"))? salesContract.setFinanced(salesContract.isFinanced()) :
-        salesContract.setFinanced(financeOption.equalsIgnoreCase("yes"));
+        boolean isFinanced = financeOption.equalsIgnoreCase("yes") ? true : false;
+
+         SalesContract salesContract = new SalesContract(date, name, email, vehicleSold, isFinanced);
+         return salesContract;
 
 
-        return salesContract;
+
 
     }
 
@@ -209,9 +211,12 @@ public class UserInterface {
 
         switch(sellOrLease){
             case 1:
-                createSalesContractWithCustomer();
-               //dealership.removeVehicle(v);
-               // ContractDataManager.saveContract();
+               ContractDataManager.saveContract(createSalesContractWithCustomer());
+
+               //remove the vehicle sold from csv
+               dealership.removeVehicle(createSalesContractWithCustomer().getVehicleSold());
+               DealershipFileManager.saveDealership(dealership);
+
                 break;
             case 2:
                 createLeaseContractWithCustomer();

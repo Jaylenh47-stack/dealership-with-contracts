@@ -49,12 +49,24 @@ public class SalesContract extends Contract{
 
     @Override
     public double getMonthlyPayment(){
-        return 0;
+        if (isFinanced){
+            if (this.getVehicleSold().getPrice() > 10000){
+                return getVehicleSold().getPrice() * 0.0425;
+            }
+            else{
+                return getVehicleSold().getPrice() * 0.0525;
+            }
+        }
+        else{
+            return 0;
+        }
     }
 
     @Override
     public double getTotalPrice(){
-        return 0;
+        return this.salesTax + getVehicleSold().getPrice() + this.recordingFee + this.processingFee;
+
+
     }
 
     public String generateYesOrNo(){
@@ -67,6 +79,7 @@ public class SalesContract extends Contract{
 
         return String.format("SALE|%s|%s|%s|%d|%d|%s|%s|%s|%s|%d|%.2f|%.2f|%.2f|%.2f|%.2f|%s|%.2f",
                 this.getDate(),this.getCustomerName(),this.getCustomerEmail(),v.getVin(),v.getYear(),v.getMake(),v.getModel(),
-                v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice(), this.salesTax, this.recordingFee, this.processingFee, this.getTotalPrice(), this.generateYesOrNo(), this.getMonthlyPayment() );
+                v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice(), this.salesTax, this.recordingFee, this.processingFee,
+                this.getTotalPrice(), this.generateYesOrNo(), this.getMonthlyPayment() );
     }
 }
