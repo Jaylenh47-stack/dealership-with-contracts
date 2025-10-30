@@ -211,10 +211,13 @@ public class UserInterface {
 
         switch(sellOrLease){
             case 1:
-               ContractDataManager.saveContract(createSalesContractWithCustomer());
+                Contract c = createSalesContractWithCustomer();
+               ContractDataManager.saveContract(c);
 
                //remove the vehicle sold from csv
-               dealership.removeVehicle(createSalesContractWithCustomer().getVehicleSold());
+               //dealership.removeVehicle(createSalesContractWithCustomer().getVehicleSold());
+                //prompt for int in arguements??
+                dealership.removeVehicle(dealership.getVehicleByVIN(c.getVehicleSold().getVin()));
                DealershipFileManager.saveDealership(dealership);
 
                 break;

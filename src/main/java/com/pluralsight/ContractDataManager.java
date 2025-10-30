@@ -11,7 +11,7 @@ public class ContractDataManager {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             if (contract instanceof SalesContract s){
-
+                bufferedWriter.newLine();
                 bufferedWriter.write(s.toEncodedString());
                 bufferedWriter.close();
             }
