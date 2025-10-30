@@ -68,6 +68,9 @@ public class UserInterface {
                 case 9:
                     processRemoveVehicleRequest();
                     break;
+                case 10:
+                    processSellLeaseVehicleRequest();
+                    break;
                 case 0:
                     return;
                 default:
@@ -168,20 +171,16 @@ public class UserInterface {
         else{
             System.out.println("No matching vin number in inventory");
         }
+    }
+
+    public void processSellLeaseVehicleRequest(){
+        //User chooses vehicle by Vin
 
 
-        //        boolean isFound = false;
-//        for (Vehicle v : dealership.getAllVehicles()){
-//            if (v.getVin() == vin){
-//                dealership.removeVehicle(v);
-//                isFound =true;
-//                DealershipFileManager.saveDealership(dealership);
-//                System.out.println("Vehicle removed");
-//            }
-//        }
-//        if (!isFound){
-//            System.out.println("No matching vin number in inventory");
-//        }
+        //Collect data for sale or lease
+
+
+        //Append the data to contracts file
     }
 
 

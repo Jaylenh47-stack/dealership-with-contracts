@@ -7,11 +7,11 @@ public class SalesContract extends Contract{
     private boolean isFinanced;
 
 
-    public SalesContract(String date, String customerName, String customerEmail, Vehicle vehicleSold, double processingFee, boolean isFinanced) {
+    public SalesContract(String date, String customerName, String customerEmail, Vehicle vehicleSold, boolean isFinanced) {
         super(date, customerName, customerEmail, vehicleSold);
-        this.salesTax = 0.05;
+        this.salesTax = vehicleSold.getPrice() *  0.05;
         this.recordingFee = 100;
-        this.processingFee = processingFee;
+        this.processingFee = (vehicleSold.getPrice() < 10000)? 295 : 495;
         this.isFinanced = isFinanced;
     }
 
@@ -55,5 +55,19 @@ public class SalesContract extends Contract{
     @Override
     public double getTotalPrice(){
         return 0;
+    }
+
+    public String generateYesOrNo(){
+        return  (this.isFinanced)? "YES" : "NO";
+    }
+
+
+    public String toEncodedString(){
+        Vehicle v = this.getVehicleSold();
+
+        return String.format("SALE|%s|%s|%s|%d|%d|%s|%s|%s|%s|%d|%.2f|%.2f|%.2f|%.2f|%.2f|%s|%.2f",
+                this.getDate(),this.getCustomerName(),this.getCustomerEmail(),v.getVin(),v.getYear(),v.getMake(),v.getModel(),
+                v.getVehicleType(), v.getColor(), v.getOdometer(), v.getPrice(), this.salesTax, this.recordingFee, this.processingFee,
+                this.getTotalPrice(), this.generateYesOrNo(), this.getMonthlyPayment());
     }
 }
