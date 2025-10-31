@@ -70,7 +70,7 @@ public class UserInterface {
                     processRemoveVehicleRequest();
                     break;
                 case 10:
-                    processSellLeaseVehicleRequest();
+                    processSellOrLeaseVehicleRequest();
                     break;
                 case 0:
                     return;
@@ -170,25 +170,39 @@ public class UserInterface {
             DealershipFileManager.saveDealership(dealership);
         }
         else{
-            System.out.println("No matching vin number in inventory");
+            System.out.println("Vehicle not found");
         }
     }
 
+    public Vehicle getVehicleByVinPrompt(){
+       boolean isFound = false;
+        do {
+            int vin = ConsoleHelper.promptForInt("Enter the vin number of the vehicle you would like to purchase");
+            Vehicle vehicleSold = dealership.getVehicleByVIN(vin);
+            if (vehicleSold != null) {
+                isFound = true;
+                return vehicleSold;
+            }
+            else{
+                System.out.println("Vehicle not found");
+                return null;
+            }
+        }while(!isFound);
+
+    }
+
     public SalesContract createSalesContractWithCustomer(){
-
-
-        int vin = ConsoleHelper.promptForInt("Enter the vin number of the vehicle you would like to purchase");
-        Vehicle vehicleSold = dealership.getVehicleByVIN(vin);
-
-
+        //Make a sales contract from user input and return
+       Vehicle v = getVehicleByVinPrompt();
         String date = ConsoleHelper.promptForString("Contract date (YYYYMMDD)");
         String name = ConsoleHelper.promptForString("Customer name");
         String email = ConsoleHelper.promptForString("Customer email") ;
         String financeOption = ConsoleHelper.promptForString("Would you like to finance the vehicle (yes/no");
-        //(financeOption.equalsIgnoreCase("yes"))? salesContract.setFinanced(salesContract.isFinanced()) :
+        //todo add console helper promptForYesNo
+
         boolean isFinanced = financeOption.equalsIgnoreCase("yes") ? true : false;
 
-         SalesContract salesContract = new SalesContract(date, name, email, vehicleSold, isFinanced);
+         SalesContract salesContract = new SalesContract(date, name, email, v, isFinanced);
          return salesContract;
 
 
@@ -200,23 +214,24 @@ public class UserInterface {
         return null;
     }
 
-    public void processSellLeaseVehicleRequest(){
-        //User chooses vehicle by Vin
-
-
-        //Collect data for sale or lease
+    public int sellOrLeasePrompt(){
+        //Print sell or lease screen and return user input
         int sellOrLease = ConsoleHelper.promptForInt("Sell or Lease\n" +
-                                                     "1) Sell \n" +
-                                                        "2) Lease");
+                "1) Sell \n" +
+                "2) Lease");
+        return sellOrLease;
+    }
 
-        switch(sellOrLease){
+    public void processSellOrLeaseVehicleRequest(){
+
+
+
+        switch(sellOrLeasePrompt()){
             case 1:
                 Contract c = createSalesContractWithCustomer();
                ContractDataManager.saveContract(c);
 
                //remove the vehicle sold from csv
-               //dealership.removeVehicle(createSalesContractWithCustomer().getVehicleSold());
-                //prompt for int in arguements??
                 dealership.removeVehicle(dealership.getVehicleByVIN(c.getVehicleSold().getVin()));
                DealershipFileManager.saveDealership(dealership);
 
