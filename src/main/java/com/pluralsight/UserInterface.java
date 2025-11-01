@@ -185,63 +185,52 @@ public class UserInterface {
             }
             else{
                 System.out.println("Vehicle not found");
-                return null;
             }
         }while(!isFound);
-
+        return null;
     }
 
-    public SalesContract createSalesContractWithCustomer(){
+    public Contract createContractWithCustomer(){
         //Make a sales contract from user input and return
+
+        int sellOrLease = ConsoleHelper.promptForInt("Sell or Lease\n" +
+                "1) Sell \n" +
+                "2) Lease");
+
        Vehicle v = getVehicleByVinPrompt();
         String date = ConsoleHelper.promptForString("Contract date (YYYYMMDD)");
         String name = ConsoleHelper.promptForString("Customer name");
         String email = ConsoleHelper.promptForString("Customer email") ;
-        String financeOption = ConsoleHelper.promptForString("Would you like to finance the vehicle (yes/no");
-        //todo add console helper promptForYesNo
 
-        boolean isFinanced = financeOption.equalsIgnoreCase("yes") ? true : false;
 
-         SalesContract salesContract = new SalesContract(date, name, email, v, isFinanced);
-         return salesContract;
-
+        if (sellOrLease == 1) {
+            String financeOption = ConsoleHelper.promptForString("Would you like to finance the vehicle (yes/no");
+            //todo add console helper promptForYesNo
+            boolean isFinanced = financeOption.equalsIgnoreCase("yes") ? true : false;
+            Contract salesContract = new SalesContract(date, name, email, v, isFinanced);
+            return salesContract;
+        }
+        else{
+            Contract leaseContract = new LeaseContract(date, name, email , v);
+            return leaseContract;
+        }
 
 
 
     }
 
-    public LeaseContract createLeaseContractWithCustomer(){
-        return null;
-    }
 
-    public int sellOrLeasePrompt(){
-        //Print sell or lease screen and return user input
-        int sellOrLease = ConsoleHelper.promptForInt("Sell or Lease\n" +
-                "1) Sell \n" +
-                "2) Lease");
-        return sellOrLease;
-    }
+
+
 
     public void processSellOrLeaseVehicleRequest(){
-
-
-
-        switch(sellOrLeasePrompt()){
-            case 1:
-                Contract c = createSalesContractWithCustomer();
-               ContractDataManager.saveContract(c);
+                Contract c = createContractWithCustomer();
+                ContractDataManager.saveContract(c);
 
                //remove the vehicle sold from csv
                 dealership.removeVehicle(dealership.getVehicleByVIN(c.getVehicleSold().getVin()));
-               DealershipFileManager.saveDealership(dealership);
+                DealershipFileManager.saveDealership(dealership);
 
-                break;
-            case 2:
-                createLeaseContractWithCustomer();
-                //dealership.removeVehicle(v);
-              //  ContractDataManager.saveContract();
-                break;
-        }
 
 
 
